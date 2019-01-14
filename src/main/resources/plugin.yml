@@ -1,0 +1,5 @@
+name: MobSelector
+version: ${project.version}
+main: me.rexlmanu.mobselector.MobSelector
+description: A mobselector for the klarcloudservice
+website: https://rexlmanu.me
