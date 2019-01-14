@@ -17,6 +17,14 @@
     </properties>
     <url>https://rexlmanu.me</url>
 
+    <developers>
+        <developer>
+            <name>rexlManu</name>
+            <url>https://rexlmanu.me</url>
+            <roles>main-developer</roles>
+        </developer>
+    </developers>
+
     <build>
         <defaultGoal>clean package</defaultGoal>
         <plugins>
