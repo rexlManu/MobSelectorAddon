@@ -38,7 +38,7 @@ public final class ConfigManager {
                 file.createNewFile();
                 this.jsonObject.add("mobSelectorServers", this.convertObjectToJsonElement(this.mobSelectorServers));
                 this.jsonObject.add("mobSelectorSettings", this.convertObjectToJsonElement(this.mobSelectorSettings));
-                FileUtils.writeToFile(this.file.toPath(), KlarCloudLibrary.GSON.toJson(this.jsonObject));
+                this.save();
             } catch (IOException e) {
                 MobSelector.getInstance().getLogger().log(Level.SEVERE, "An error occurred while creating the configuration: ".concat(e.getMessage()));
             }
@@ -51,6 +51,10 @@ public final class ConfigManager {
 
         loadMobSelectorServers();
         loadMobSelectorSettings();
+    }
+
+    public void save() {
+        FileUtils.writeToFile(this.file.toPath(), KlarCloudLibrary.GSON.toJson(this.jsonObject));
     }
 
     private JsonElement convertObjectToJsonElement(Object object) {

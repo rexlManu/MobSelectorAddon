@@ -3,6 +3,7 @@ package me.rexlmanu.mobselector.mob;
 import com.google.common.collect.Lists;
 import de.klarcloudservice.meta.server.ServerGroup;
 import me.rexlmanu.mobselector.MobSelector;
+import me.rexlmanu.mobselector.configuration.ConfigManager;
 import me.rexlmanu.mobselector.mob.defaults.MobSelectorServer;
 import me.rexlmanu.mobselector.mob.defaults.ServerMob;
 import me.rexlmanu.mobselector.utils.MobUtils;
@@ -14,7 +15,8 @@ import java.util.Set;
 public final class MobManager {
 
     public void spawnMob(ServerGroup serverGroup, ServerMob serverMob) {
-        final Set<MobSelectorServer> mobSelectorServers = MobSelector.getInstance().getConfigManager().getMobSelectorServers();
+        ConfigManager configManager = MobSelector.getInstance().getConfigManager();
+        final Set<MobSelectorServer> mobSelectorServers = configManager.getMobSelectorServers();
         final MobSelectorServer selectorServer = mobSelectorServers
                 .stream()
                 .filter(mobSelectorServer -> mobSelectorServer.getServerName().equals(serverGroup.getName()))
@@ -26,5 +28,6 @@ public final class MobManager {
         spawnEntity.setCustomNameVisible(true);
         spawnEntity.setCustomName(serverMob.getDisplayName());
         MobUtils.setAiEnabled(spawnEntity, true);
+        configManager.save();
     }
 }

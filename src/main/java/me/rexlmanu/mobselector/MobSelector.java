@@ -3,6 +3,7 @@ package me.rexlmanu.mobselector;
 import lombok.Getter;
 import me.rexlmanu.mobselector.commands.MobSelectorCommand;
 import me.rexlmanu.mobselector.configuration.ConfigManager;
+import me.rexlmanu.mobselector.inventory.InventoryManager;
 import me.rexlmanu.mobselector.listeners.InventoryListener;
 import me.rexlmanu.mobselector.listeners.MobListener;
 import me.rexlmanu.mobselector.mob.MobManager;
@@ -18,6 +19,7 @@ public final class MobSelector extends JavaPlugin {
 
     private ConfigManager configManager;
     private MobManager mobManager;
+    private InventoryManager inventoryManager;
 
     private MobSelectorCommand mobSelectorCommand;
 
@@ -27,6 +29,7 @@ public final class MobSelector extends JavaPlugin {
 
         this.configManager = new ConfigManager();
         this.mobManager = new MobManager();
+        this.inventoryManager = new InventoryManager();
 
         this.mobSelectorCommand = new MobSelectorCommand();
 
