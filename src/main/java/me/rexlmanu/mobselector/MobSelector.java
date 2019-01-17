@@ -27,6 +27,8 @@ public final class MobSelector extends JavaPlugin {
     public void onEnable() {
         instance = this;
 
+        this.getDataFolder().mkdir();
+
         this.configManager = new ConfigManager();
         this.mobManager = new MobManager();
         this.inventoryManager = new InventoryManager();
@@ -34,16 +36,21 @@ public final class MobSelector extends JavaPlugin {
         this.mobSelectorCommand = new MobSelectorCommand();
 
         this.registerListeners();
+
+        this.mobManager.spawnAllMobs();
     }
 
     private void registerListeners() {
         final PluginManager pluginManager = Bukkit.getPluginManager();
         pluginManager.registerEvents(new InventoryListener(), this);
         pluginManager.registerEvents(new MobListener(), this);
+
+        this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
     }
 
     @Override
     public void onDisable() {
+        this.mobManager.despairAllMobs();
         instance = null;
     }
 }

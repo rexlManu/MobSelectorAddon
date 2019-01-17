@@ -18,7 +18,7 @@ public final class InventoryListener implements Listener {
         if (optionalServerInventory.isPresent())
             event.setCancelled(true);
         optionalServerInventory.ifPresent(serverInventory -> {
-
+            serverInventory.signalClick(event.getSlot());
         });
     }
 

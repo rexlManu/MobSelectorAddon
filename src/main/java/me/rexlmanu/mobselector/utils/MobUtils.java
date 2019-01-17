@@ -1,9 +1,13 @@
 package me.rexlmanu.mobselector.utils;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
+import org.bukkit.util.Vector;
 
 import java.lang.reflect.Method;
+import java.util.List;
 
 public final class MobUtils {
 
@@ -35,7 +39,7 @@ public final class MobUtils {
         }
     }
 
-    public static void setAiEnabled(Entity entity, boolean enabled) {
+    public static void setAiEnabled(final Entity entity, final boolean enabled) {
         try {
             Object nmsEntity = MobUtils.getHandle.invoke(entity);
             Object tag = MobUtils.getNBTTag.invoke(nmsEntity);
@@ -49,4 +53,22 @@ public final class MobUtils {
             e.printStackTrace();
         }
     }
+
+    private static boolean isLookingAt(final Player player, final Entity target) {
+        final Location eyeLocation = player.getEyeLocation();
+        double dot = target.getLocation().toVector().subtract(eyeLocation.toVector()).normalize().dot(eyeLocation.getDirection());
+        player.sendMessage(String.format("Debug: dot=%s", dot));
+        return dot > 0.99D;
+    }
+
+    public static Entity getLookingEntity(final Player player) {
+        final List<Entity> nearbyEntities = player.getNearbyEntities(10, 10, 10);
+        for (final Entity nearbyEntity : nearbyEntities) {
+            if (MobUtils.isLookingAt(player, nearbyEntity))
+                return nearbyEntity;
+        }
+        return null;
+    }
+
+
 }

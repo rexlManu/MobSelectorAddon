@@ -6,9 +6,12 @@ import com.google.common.collect.Lists;
 import de.klarcloudservice.KlarCloudAPISpigot;
 import de.klarcloudservice.meta.server.ServerGroup;
 import me.rexlmanu.mobselector.MobSelector;
+import me.rexlmanu.mobselector.mob.defaults.MobLocation;
 import me.rexlmanu.mobselector.mob.defaults.ServerMob;
+import me.rexlmanu.mobselector.utils.MobUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.command.*;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
@@ -44,6 +47,46 @@ public final class MobSelectorCommand implements CommandExecutor, TabCompleter {
                     sender.sendMessage(ChatColor.GREEN + "Help overview for mobselector");
                     sender.sendMessage(String.format("%s» %s/mobselector help %s| %sHelp overview", ChatColor.DARK_GRAY, ChatColor.GREEN, ChatColor.DARK_GRAY, ChatColor.GRAY));
                     sender.sendMessage(String.format("%s» %s/mobselector create <ServerGroup> <EntityType> %s| %sCreate one servermob", ChatColor.DARK_GRAY, ChatColor.GREEN, ChatColor.DARK_GRAY, ChatColor.GRAY));
+                    sender.sendMessage(String.format("%s» %s/mobselector changetype <EntityType> %s| %sChange the type from a servermob", ChatColor.DARK_GRAY, ChatColor.GREEN, ChatColor.DARK_GRAY, ChatColor.GRAY));
+                    sender.sendMessage(String.format("%s» %s/mobselector changename <Displayname> %s| %sChange the name from a servermob", ChatColor.DARK_GRAY, ChatColor.GREEN, ChatColor.DARK_GRAY, ChatColor.GRAY));
+                    sender.sendMessage(String.format("%s» %s/mobselector remove %s| %sRemove a servermob", ChatColor.DARK_GRAY, ChatColor.GREEN, ChatColor.DARK_GRAY, ChatColor.GRAY));
+                } else if ("remove".equalsIgnoreCase(args[0])) {
+                    final Entity lookingEntity = MobUtils.getLookingEntity(player);
+                    if (lookingEntity == null) {
+                        player.sendMessage(ChatColor.RED + "To edit an enity, you have to kook at one.");
+                        return true;
+                    }
+                }
+                break;
+            case 2:
+                final Entity lookingEntity = MobUtils.getLookingEntity(player);
+                if (lookingEntity == null) {
+                    player.sendMessage(ChatColor.RED + "To edit an enity, you have to kook at one.");
+                    return true;
+                }
+                ServerMob serverMob = instance.getMobManager().getServerMobByEntity(lookingEntity);
+                if (serverMob == null) {
+                    player.sendMessage(ChatColor.RED + "This entity is not a servermob.");
+                    return true;
+                }
+                if ("changetype".equalsIgnoreCase(args[0])) {
+                    final EntityType entityType = getEntityByName(args[1]);
+                    if (entityType == null) {
+                        sender.sendMessage(ChatColor.RED + "The entity type could not be found");
+                        return true;
+                    }
+                    instance.getMobManager().removeMob(lookingEntity);
+                    serverMob.setEntityTypeName(entityType.name());
+                    instance.getMobManager().spawnMob(serverMob);
+                    instance.getConfigManager().save();
+                    sender.sendMessage(ChatColor.GREEN + String.format("You have successful changed the entity type to %s.", entityType.name()));
+                } else if ("changename".equalsIgnoreCase(args[0])) {
+                    instance.getMobManager().removeMob(lookingEntity);
+                    final String displayName = ChatColor.translateAlternateColorCodes('&', args[1].replace("_", " "));
+                    serverMob.setDisplayName(displayName);
+                    instance.getMobManager().spawnMob(serverMob);
+                    instance.getConfigManager().save();
+                    sender.sendMessage(ChatColor.GREEN + String.format("You have successful changed the display name to '%s'.", displayName));
                 }
                 break;
             case 3:
@@ -52,17 +95,16 @@ public final class MobSelectorCommand implements CommandExecutor, TabCompleter {
                     final String entityTypeName = args[2];
                     final Map<String, ServerGroup> serverGroups = KlarCloudAPISpigot.getInstance().getInternalCloudNetwork().getServerGroups();
                     if (!serverGroups.containsKey(serverGroupName)) {
-                        sender.sendMessage(ChatColor.GREEN + "The server group could not be found");
+                        sender.sendMessage(ChatColor.RED + "The server group could not be found");
                         return true;
                     }
                     final ServerGroup serverGroup = serverGroups.get(serverGroupName);
-                    final Optional<EntityType> entityTypeOptional = Enums.getIfPresent(EntityType.class, entityTypeName.toUpperCase());
-                    if (!entityTypeOptional.isPresent()) {
-                        sender.sendMessage(ChatColor.GREEN + "The entity type could not be found");
+                    EntityType entityType = getEntityByName(entityTypeName);
+                    if (entityType == null) {
+                        sender.sendMessage(ChatColor.RED + "The entity type could not be found");
                         return true;
                     }
-                    final EntityType entityType = entityTypeOptional.get();
-                    instance.getMobManager().spawnMob(serverGroup, new ServerMob(player.getLocation(), ChatColor.DARK_GRAY + "» " + ChatColor.RED + serverGroupName, entityType));
+                    instance.getMobManager().createMob(serverGroup, new ServerMob(MobLocation.get(player.getLocation()), ChatColor.DARK_GRAY + "» " + ChatColor.RED + serverGroupName, entityType.name()));
                     sender.sendMessage(ChatColor.GREEN + "The server mob was created successfully");
                 }
                 break;
@@ -72,6 +114,11 @@ public final class MobSelectorCommand implements CommandExecutor, TabCompleter {
         }
 
         return true;
+    }
+
+    private EntityType getEntityByName(String entityTypeName) {
+        final Optional<EntityType> entityTypeOptional = Enums.getIfPresent(EntityType.class, entityTypeName.toUpperCase());
+        return entityTypeOptional.isPresent() ? entityTypeOptional.get() : null;
     }
 
     @Override

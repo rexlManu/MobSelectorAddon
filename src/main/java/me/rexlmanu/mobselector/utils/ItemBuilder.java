@@ -27,6 +27,10 @@ public final class ItemBuilder {
         this.itemStack = new ItemStack(material, amount, data);
     }
 
+    public ItemBuilder(Material material, int amount, int data) {
+        this(material, amount, (short) data);
+    }
+
     public ItemBuilder setDisplayName(String name) {
         ItemMeta itemMeta = itemStack.getItemMeta();
         itemMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', name));
