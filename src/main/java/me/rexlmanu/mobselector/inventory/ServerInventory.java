@@ -60,7 +60,7 @@ public final class ServerInventory {
             int online = serverInfo.getOnlinePlayers().size();
             int maxPlayers = serverInfo.getServerGroup().getAdvancedConfiguration().getMaxPlayers();
 
-            if (serverInfo.isMaintenance()) {
+            if (serverInfo.getServerGroup().isMaintenance()) {
                 lore = MOB_SELECTOR_SETTINGS.getLoreMaintenance();
                 ConfigManager.SimpleItemStack simpleItemStack = MOB_SELECTOR_SETTINGS.getMaintenanceServerItem();
                 material = simpleItemStack.getMaterial();
@@ -88,10 +88,7 @@ public final class ServerInventory {
         });
     }
 
-    void close() {
-        //Nothing
-        player.sendMessage("You have closed the inventory.");
-    }
+    void close() {}
 
     public void signalClick(final int slot) {
         final ItemStack clickedItemStack = this.inventory.getItem(slot);

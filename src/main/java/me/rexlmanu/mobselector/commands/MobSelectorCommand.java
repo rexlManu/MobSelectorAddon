@@ -25,7 +25,7 @@ public final class MobSelectorCommand implements CommandExecutor, TabCompleter {
         pluginCommand.setTabCompleter(this);
         pluginCommand.setExecutor(this);
         pluginCommand.setDescription("The main command from plugin.");
-        pluginCommand.setUsage("Please use 'mobselector help' for the helptopic.");
+        pluginCommand.setUsage("Please use '/mobselector help' for the helptopic.");
         pluginCommand.setPermission("mobselector.command.mobselector");
         pluginCommand.setPermissionMessage(MobSelector.getInstance().getConfigManager().getMobSelectorSettings().getPermissionMessage());
     }
