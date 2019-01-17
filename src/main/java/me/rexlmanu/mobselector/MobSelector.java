@@ -11,6 +11,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.logging.Level;
+
 @Getter
 public final class MobSelector extends JavaPlugin {
 
@@ -27,7 +29,7 @@ public final class MobSelector extends JavaPlugin {
     public void onEnable() {
         instance = this;
 
-        this.getDataFolder().mkdir();
+        if (this.getDataFolder().mkdir()) getLogger().log(Level.INFO, "The folder for the config has been created.");
 
         this.configManager = new ConfigManager();
         this.mobManager = new MobManager();

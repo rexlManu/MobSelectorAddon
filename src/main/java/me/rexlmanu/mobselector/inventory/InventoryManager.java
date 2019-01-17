@@ -32,6 +32,5 @@ public final class InventoryManager extends BukkitRunnable {
 
     public void unregister(ServerInventory serverInventory) {
         this.serverInventories.remove(serverInventory);
-        serverInventory.close();
     }
 }

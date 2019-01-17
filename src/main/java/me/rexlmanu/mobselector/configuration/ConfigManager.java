@@ -8,15 +8,12 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import de.klarcloudservice.KlarCloudLibrary;
 import de.klarcloudservice.utility.files.FileUtils;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import me.rexlmanu.mobselector.MobSelector;
 import me.rexlmanu.mobselector.mob.defaults.MobSelectorServer;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.entity.EntityType;
 
 import java.io.File;
 import java.io.IOException;
@@ -35,6 +32,7 @@ public final class ConfigManager {
     @Getter
     private MobSelectorSettings mobSelectorSettings;
 
+    @SuppressWarnings("UnstableApiUsage")
     public ConfigManager() {
         this.file = new File(MobSelector.getInstance().getDataFolder(), "config.json");
         this.mobSelectorServers = Sets.newHashSet();
@@ -43,7 +41,8 @@ public final class ConfigManager {
 
         if (!file.exists())
             try {
-                file.createNewFile();
+                if (file.createNewFile())
+                    MobSelector.getInstance().getLogger().log(Level.INFO, "The configuration file was created successfully\n");
                 this.save();
             } catch (IOException e) {
                 MobSelector.getInstance().getLogger().log(Level.SEVERE, "An error occurred while creating the configuration: ".concat(e.getMessage()));
@@ -113,11 +112,10 @@ public final class ConfigManager {
             this.data = data;
         }
 
+        @SuppressWarnings("UnstableApiUsage")
         public Material getMaterial() {
             final Optional<Material> entityTypeOptional = Enums.getIfPresent(Material.class, this.materialName.toUpperCase());
-            if (!entityTypeOptional.isPresent())
-                return Material.values()[0];
-            return entityTypeOptional.get();
+            return entityTypeOptional.isPresent() ? entityTypeOptional.get() : Material.values()[0];
         }
     }
 }

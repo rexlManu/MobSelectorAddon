@@ -5,8 +5,6 @@ import com.google.common.base.Optional;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Setter;
-import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 
 @Data
@@ -18,10 +16,9 @@ public final class ServerMob {
     private String displayName;
     private String entityTypeName;
 
+    @SuppressWarnings("UnstableApiUsage")
     public EntityType getEntityType() {
         final Optional<EntityType> entityTypeOptional = Enums.getIfPresent(EntityType.class, this.entityTypeName.toUpperCase());
-        if (!entityTypeOptional.isPresent())
-            return EntityType.values()[0];
-        return entityTypeOptional.get();
+        return entityTypeOptional.isPresent() ? entityTypeOptional.get() : EntityType.values()[0];
     }
 }

@@ -116,6 +116,7 @@ public final class MobSelectorCommand implements CommandExecutor, TabCompleter {
         return true;
     }
 
+    @SuppressWarnings("UnstableApiUsage")
     private EntityType getEntityByName(String entityTypeName) {
         final Optional<EntityType> entityTypeOptional = Enums.getIfPresent(EntityType.class, entityTypeName.toUpperCase());
         return entityTypeOptional.isPresent() ? entityTypeOptional.get() : null;

@@ -13,7 +13,7 @@ import java.util.List;
 
 public final class ItemBuilder {
 
-    private ItemStack itemStack;
+    private final ItemStack itemStack;
 
     public ItemBuilder(Material material) {
         this.itemStack = new ItemStack(material);
@@ -23,7 +23,7 @@ public final class ItemBuilder {
         this.itemStack = new ItemStack(material, amount);
     }
 
-    public ItemBuilder(Material material, int amount, short data) {
+    private ItemBuilder(Material material, int amount, short data) {
         this.itemStack = new ItemStack(material, amount, data);
     }
 

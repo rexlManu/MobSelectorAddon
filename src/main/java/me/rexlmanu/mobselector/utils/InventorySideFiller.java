@@ -4,7 +4,6 @@ import com.google.common.collect.Lists;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class InventorySideFiller {
@@ -13,7 +12,7 @@ public class InventorySideFiller {
         InventorySideFiller.getSideSlots(inventory).forEach(slot -> inventory.setItem(slot, itemStack));
     }
 
-    public static List<Integer> getSideSlots(final Inventory inventory) {
+    private static List<Integer> getSideSlots(final Inventory inventory) {
         final List<Integer> sideSlots = Lists.newArrayList();
         final int size = inventory.getSize();
         final int rows = size / 9;

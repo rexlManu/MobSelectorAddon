@@ -17,9 +17,7 @@ public final class InventoryListener implements Listener {
         Optional<ServerInventory> optionalServerInventory = MobSelector.getInstance().getInventoryManager().getServerInventories().stream().filter(serverInventory -> serverInventory.getInventory().equals(event.getClickedInventory())).findFirst();
         if (optionalServerInventory.isPresent())
             event.setCancelled(true);
-        optionalServerInventory.ifPresent(serverInventory -> {
-            serverInventory.signalClick(event.getSlot());
-        });
+        optionalServerInventory.ifPresent(serverInventory -> serverInventory.signalClick(event.getSlot()));
     }
 
     @EventHandler

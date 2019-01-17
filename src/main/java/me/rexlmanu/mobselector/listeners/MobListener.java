@@ -1,9 +1,7 @@
 package me.rexlmanu.mobselector.listeners;
 
 import me.rexlmanu.mobselector.MobSelector;
-import me.rexlmanu.mobselector.inventory.ServerInventory;
 import me.rexlmanu.mobselector.mob.defaults.MobSelectorServer;
-import me.rexlmanu.mobselector.mob.defaults.ServerMob;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

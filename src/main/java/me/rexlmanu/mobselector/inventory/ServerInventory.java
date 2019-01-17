@@ -88,8 +88,6 @@ public final class ServerInventory {
         });
     }
 
-    void close() {}
-
     public void signalClick(final int slot) {
         final ItemStack clickedItemStack = this.inventory.getItem(slot);
         if (clickedItemStack == null) return;

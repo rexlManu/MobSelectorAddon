@@ -1,7 +1,6 @@
 package me.rexlmanu.mobselector.mob;
 
 import com.google.common.collect.Lists;
-import de.klarcloudservice.KlarCloudAPISpigot;
 import de.klarcloudservice.meta.server.ServerGroup;
 import me.rexlmanu.mobselector.MobSelector;
 import me.rexlmanu.mobselector.configuration.ConfigManager;
@@ -11,7 +10,6 @@ import me.rexlmanu.mobselector.utils.MobUtils;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.List;
 import java.util.Optional;
