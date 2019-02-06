@@ -23,20 +23,22 @@ import java.util.List;
 @Data
 public final class ServerInventory {
 
-    private final ConfigManager.MobSelectorSettings MOB_SELECTOR_SETTINGS;
 
     private final Player player;
     private MobSelectorServer mobSelectorServer;
+
+    private final ConfigManager.MobSelectorSettings mobSelectorSettings;
+
     private final Inventory inventory;
 
     ServerInventory(final Player player, final MobSelectorServer mobSelectorServer) {
-        this.MOB_SELECTOR_SETTINGS = MobSelector.getInstance().getConfigManager().getMobSelectorSettings();
         this.player = player;
         this.mobSelectorServer = mobSelectorServer;
+        this.mobSelectorSettings = MobSelector.getInstance().getConfigManager().getMobSelectorSettings();
         this.inventory = Bukkit.createInventory(null,
-                MOB_SELECTOR_SETTINGS.getInventoryRows() * 9,
+                mobSelectorSettings.getInventoryRows() * 9,
                 ChatColor.translateAlternateColorCodes('&',
-                        MOB_SELECTOR_SETTINGS.getInventoryDisplayName()));
+                        mobSelectorSettings.getInventoryDisplayName()));
     }
 
     void show() {
@@ -61,29 +63,29 @@ public final class ServerInventory {
             int maxPlayers = serverInfo.getServerGroup().getAdvancedConfiguration().getMaxPlayers();
 
             if (serverInfo.getServerGroup().isMaintenance()) {
-                lore = MOB_SELECTOR_SETTINGS.getLoreMaintenance();
-                ConfigManager.SimpleItemStack simpleItemStack = MOB_SELECTOR_SETTINGS.getMaintenanceServerItem();
+                lore = mobSelectorSettings.getLoreMaintenance();
+                ConfigManager.SimpleItemStack simpleItemStack = mobSelectorSettings.getMaintenanceServerItem();
                 material = simpleItemStack.getMaterial();
                 data = simpleItemStack.getData();
             } else if (serverInfo.getOnlinePlayers().isEmpty()) {
-                lore = MOB_SELECTOR_SETTINGS.getLoreEmpty();
-                ConfigManager.SimpleItemStack simpleItemStack = MOB_SELECTOR_SETTINGS.getEmptyServerItem();
+                lore = mobSelectorSettings.getLoreEmpty();
+                ConfigManager.SimpleItemStack simpleItemStack = mobSelectorSettings.getEmptyServerItem();
                 material = simpleItemStack.getMaterial();
                 data = simpleItemStack.getData();
             } else if (online >= maxPlayers) {
-                lore = MOB_SELECTOR_SETTINGS.getLoreFull();
-                ConfigManager.SimpleItemStack simpleItemStack = MOB_SELECTOR_SETTINGS.getFullServerItem();
+                lore = mobSelectorSettings.getLoreFull();
+                ConfigManager.SimpleItemStack simpleItemStack = mobSelectorSettings.getFullServerItem();
                 material = simpleItemStack.getMaterial();
                 data = simpleItemStack.getData();
             } else {
-                lore = MOB_SELECTOR_SETTINGS.getLoreOnline();
-                ConfigManager.SimpleItemStack simpleItemStack = MOB_SELECTOR_SETTINGS.getOnlineServerItem();
+                lore = mobSelectorSettings.getLoreOnline();
+                ConfigManager.SimpleItemStack simpleItemStack = mobSelectorSettings.getOnlineServerItem();
                 material = simpleItemStack.getMaterial();
                 data = simpleItemStack.getData();
             }
             for (int i = 0; i < lore.size(); i++)
                 lore.set(i, lore.get(i).replace("%online_players%", String.valueOf(online)).replace("%max_players%", String.valueOf(maxPlayers)));
-            ItemBuilder itemBuilder = new ItemBuilder(material, 1, data).addLore(lore).setDisplayName(MOB_SELECTOR_SETTINGS.getServerNamePrefix() + serverInfo.getCloudProcess().getName());
+            ItemBuilder itemBuilder = new ItemBuilder(material, 1, data).addLore(lore).setDisplayName(mobSelectorSettings.getServerNamePrefix() + serverInfo.getCloudProcess().getName());
             this.inventory.addItem(itemBuilder.build());
         });
     }
@@ -93,10 +95,10 @@ public final class ServerInventory {
         if (clickedItemStack == null) return;
         if (!clickedItemStack.getItemMeta().hasDisplayName()) return;
         final String displayName = clickedItemStack.getItemMeta().getDisplayName();
-        String prefix = ChatColor.translateAlternateColorCodes('&', MOB_SELECTOR_SETTINGS.getServerNamePrefix());
+        String prefix = ChatColor.translateAlternateColorCodes('&', mobSelectorSettings.getServerNamePrefix());
         if (!displayName.startsWith(prefix)) return;
         final String serverName = displayName.replace(prefix, "");
-        player.sendMessage(MOB_SELECTOR_SETTINGS.getConnectMessage().replace("%server%", serverName));
+        player.sendMessage(mobSelectorSettings.getConnectMessage().replace("%server%", serverName));
         PlayerUtils.sendPlayerToServer(player, serverName);
     }
 }
