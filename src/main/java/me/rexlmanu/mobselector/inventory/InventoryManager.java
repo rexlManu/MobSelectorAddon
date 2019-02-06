@@ -19,8 +19,8 @@ public final class InventoryManager extends BukkitRunnable {
         this.runTaskTimer(MobSelector.getInstance(), 0, 1);
     }
 
-    public void createServerInventory(Player player, MobSelectorServer mobSelectorServer) {
-        ServerInventory serverInventory = new ServerInventory(player, mobSelectorServer);
+    public void createServerInventory(final Player player, final MobSelectorServer mobSelectorServer) {
+        final ServerInventory serverInventory = new ServerInventory(player, mobSelectorServer);
         serverInventory.show();
         this.serverInventories.add(serverInventory);
     }
@@ -30,7 +30,7 @@ public final class InventoryManager extends BukkitRunnable {
         this.serverInventories.forEach(ServerInventory::update);
     }
 
-    public void unregister(ServerInventory serverInventory) {
+    public void unregister(final ServerInventory serverInventory) {
         this.serverInventories.remove(serverInventory);
     }
 }

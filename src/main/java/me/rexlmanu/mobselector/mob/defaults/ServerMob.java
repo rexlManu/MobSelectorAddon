@@ -18,7 +18,8 @@ public final class ServerMob {
 
     @SuppressWarnings("UnstableApiUsage")
     public EntityType getEntityType() {
-        final Optional<EntityType> entityTypeOptional = Enums.getIfPresent(EntityType.class, this.entityTypeName.toUpperCase());
+        final Optional<EntityType> entityTypeOptional = Enums.getIfPresent(EntityType.class,
+                this.entityTypeName.toUpperCase());
         return entityTypeOptional.isPresent() ? entityTypeOptional.get() : EntityType.values()[0];
     }
 }

@@ -39,23 +39,27 @@ public final class ConfigManager {
         this.jsonObject = new JsonObject();
         this.mobSelectorSettings = new MobSelectorSettings();
 
-        if (!file.exists())
+        if (! this.file.exists())
             try {
-                if (file.createNewFile())
-                    MobSelector.getInstance().getLogger().log(Level.INFO, "The configuration file was created successfully\n");
+                if (this.file.createNewFile())
+                    MobSelector.getInstance().getLogger().log(Level.INFO,
+                            "The configuration file was created successfully\n");
                 this.save();
-            } catch (IOException e) {
-                MobSelector.getInstance().getLogger().log(Level.SEVERE, "An error occurred while creating the configuration: ".concat(e.getMessage()));
+            } catch (final IOException e) {
+                MobSelector.getInstance().getLogger().log(Level.SEVERE,
+                        "An error occurred while creating the configuration: ".concat(e.getMessage()));
             }
 
         try {
-            this.jsonObject = KlarCloudLibrary.PARSER.parse(Files.toString(this.file, StandardCharsets.UTF_8)).getAsJsonObject();
-        } catch (IOException e) {
-            MobSelector.getInstance().getLogger().log(Level.SEVERE, "An error occurred while loading the configuration: ".concat(e.getMessage()));
+            this.jsonObject = KlarCloudLibrary.PARSER.parse(
+                    Files.toString(this.file, StandardCharsets.UTF_8)).getAsJsonObject();
+        } catch (final IOException e) {
+            MobSelector.getInstance().getLogger().log(Level.SEVERE,
+                    "An error occurred while loading the configuration: ".concat(e.getMessage()));
         }
 
-        loadMobSelectorServers();
-        loadMobSelectorSettings();
+        this.loadMobSelectorServers();
+        this.loadMobSelectorSettings();
     }
 
     public void save() {
@@ -64,7 +68,7 @@ public final class ConfigManager {
         FileUtils.writeToFile(this.file.toPath(), KlarCloudLibrary.GSON.toJson(this.jsonObject));
     }
 
-    private JsonElement convertObjectToJsonElement(Object object) {
+    private JsonElement convertObjectToJsonElement(final Object object) {
         return KlarCloudLibrary.PARSER.parse(KlarCloudLibrary.GSON.toJson(object));
     }
 
@@ -74,21 +78,23 @@ public final class ConfigManager {
     }
 
     private void loadMobSelectorServers() {
-        jsonObject.getAsJsonArray("mobSelectorServers").forEach(jsonElement ->
+        this.jsonObject.getAsJsonArray("mobSelectorServers").forEach(jsonElement ->
                 this.mobSelectorServers.add(KlarCloudLibrary.GSON.fromJson(jsonElement, MobSelectorServer.class)));
     }
 
     @Data
     public class MobSelectorSettings {
 
-        private final String permissionMessage = "&cI'm sorry but you do not have permission to perform this command." +
-                " Please contact the server administrator if you believe that this is in error.",
+        private final String permissionMessage =
+                "&cI'm sorry but you do not have permission to perform this command." +
+                        " Please contact the server administrator if you believe that this is in error.",
                 consoleSender = "&cPlease execute this command as a player.",
                 inventoryDisplayName = "&8» &4Mobselector",
                 serverNamePrefix = "&8» &a",
                 connectMessage = "&aYou will be sent to the server %server%.";
 
-        private final List<String> loreOnline = Arrays.asList("", "&7Players online&8: &a%online_players%&8/&a%max_players%&r", ""),
+        private final List<String> loreOnline = Arrays.asList("",
+                "&7Players online&8: &a%online_players%&8/&a%max_players%&r", ""),
                 loreFull = Arrays.asList("", "&cThis server is already full.", ""),
                 loreEmpty = Arrays.asList("", "&aFeel free to join this server.", ""),
                 loreMaintenance = Arrays.asList("", "&bThis server is in maintenance mode.", "");
@@ -107,14 +113,15 @@ public final class ConfigManager {
         private final String materialName;
         private final int data;
 
-        SimpleItemStack(Material material, int data) {
+        SimpleItemStack(final Material material, final int data) {
             this.materialName = material.name();
             this.data = data;
         }
 
         @SuppressWarnings("UnstableApiUsage")
         public Material getMaterial() {
-            final Optional<Material> entityTypeOptional = Enums.getIfPresent(Material.class, this.materialName.toUpperCase());
+            final Optional<Material> entityTypeOptional = Enums.getIfPresent(Material.class,
+                    this.materialName.toUpperCase());
             return entityTypeOptional.isPresent() ? entityTypeOptional.get() : Material.values()[0];
         }
     }

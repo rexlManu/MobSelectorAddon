@@ -30,7 +30,7 @@ public final class MobManager {
                 .stream()
                 .filter(mobSelectorServer -> mobSelectorServer.getServerName().equals(serverGroup.getName()))
                 .findFirst().orElse(new MobSelectorServer(serverGroup.getName(), Lists.newArrayList()));
-        if (!mobSelectorServers.contains(selectorServer))
+        if (! mobSelectorServers.contains(selectorServer))
             configManager.getMobSelectorServers().add(selectorServer);
         selectorServer.getServerMobs().add(serverMob);
         this.spawnMob(serverMob);
@@ -42,17 +42,21 @@ public final class MobManager {
         final Entity spawnEntity = spawnLocation.getWorld().spawnEntity(spawnLocation, serverMob.getEntityType());
         spawnEntity.setCustomNameVisible(true);
         spawnEntity.setCustomName(serverMob.getDisplayName());
-        spawnEntity.setMetadata("serverMob", new FixedMetadataValue(MobSelector.getInstance(), serverMob.hashCode()));
+        spawnEntity.setMetadata("serverMob", new FixedMetadataValue(MobSelector.getInstance(),
+                serverMob.hashCode()));
         this.spawnedEntities.add(spawnEntity);
         MobUtils.setAiEnabled(spawnEntity, false);
     }
 
     public ServerMob getServerMobByEntity(final Entity entity) {
-        if (!entity.hasMetadata("serverMob"))
+        if (! entity.hasMetadata("serverMob"))
             return null;
-        for (final MobSelectorServer mobSelectorServer : MobSelector.getInstance().getConfigManager().getMobSelectorServers()) {
-            final Optional<ServerMob> optionalServerMob = mobSelectorServer.getServerMobs().stream().filter(serverMob ->
-                    entity.getMetadata("serverMob").get(0).asInt() == serverMob.hashCode()).findFirst();
+        for (final MobSelectorServer mobSelectorServer : MobSelector.getInstance()
+                .getConfigManager().getMobSelectorServers()) {
+            final Optional<ServerMob> optionalServerMob = mobSelectorServer.getServerMobs()
+                    .stream().filter(serverMob ->
+                            entity.getMetadata("serverMob").get(0).asInt() ==
+                                    serverMob.hashCode()).findFirst();
             if (optionalServerMob.isPresent())
                 return optionalServerMob.get();
         }

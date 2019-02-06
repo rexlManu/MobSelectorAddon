@@ -15,8 +15,10 @@ public class PlayerUtils {
             final DataOutputStream dataOutputStream = new DataOutputStream(byteArrayOutputStream);
             dataOutputStream.writeUTF("Connect");
             dataOutputStream.writeUTF(serverName);
-            player.sendPluginMessage(MobSelector.getInstance(), "BungeeCord", byteArrayOutputStream.toByteArray());
-        } catch (IOException e) {
+            player.sendPluginMessage(MobSelector.getInstance(),
+                    "BungeeCord",
+                    byteArrayOutputStream.toByteArray());
+        } catch (final IOException e) {
             e.printStackTrace();
         }
     }

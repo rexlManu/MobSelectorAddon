@@ -29,7 +29,8 @@ public final class MobSelector extends JavaPlugin {
     public void onEnable() {
         instance = this;
 
-        if (this.getDataFolder().mkdir()) getLogger().log(Level.INFO, "The folder for the config has been created.");
+        if (this.getDataFolder().mkdir()) this.getLogger().log(Level.INFO,
+                "The folder for the config has been created.");
 
         this.configManager = new ConfigManager();
         this.mobManager = new MobManager();

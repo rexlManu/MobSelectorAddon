@@ -15,69 +15,69 @@ public final class ItemBuilder {
 
     private final ItemStack itemStack;
 
-    public ItemBuilder(Material material) {
+    public ItemBuilder(final Material material) {
         this.itemStack = new ItemStack(material);
     }
 
-    public ItemBuilder(Material material, int amount) {
+    public ItemBuilder(final Material material, final int amount) {
         this.itemStack = new ItemStack(material, amount);
     }
 
-    private ItemBuilder(Material material, int amount, short data) {
+    private ItemBuilder(final Material material, final int amount, final short data) {
         this.itemStack = new ItemStack(material, amount, data);
     }
 
-    public ItemBuilder(Material material, int amount, int data) {
+    public ItemBuilder(final Material material, final int amount, final int data) {
         this(material, amount, (short) data);
     }
 
-    public ItemBuilder setDisplayName(String name) {
-        ItemMeta itemMeta = itemStack.getItemMeta();
+    public ItemBuilder setDisplayName(final String name) {
+        final ItemMeta itemMeta = this.itemStack.getItemMeta();
         itemMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', name));
-        itemStack.setItemMeta(itemMeta);
+        this.itemStack.setItemMeta(itemMeta);
         return this;
     }
 
-    public ItemBuilder addEnchantments(HashMap<Enchantment, Integer> enchantments) {
-        itemStack.addEnchantments(enchantments);
+    public ItemBuilder addEnchantments(final HashMap<Enchantment, Integer> enchantments) {
+        this.itemStack.addEnchantments(enchantments);
         return this;
     }
 
-    public ItemBuilder addEnchantment(Enchantment enchantment, int level) {
-        ItemMeta itemMeta = itemStack.getItemMeta();
+    public ItemBuilder addEnchantment(final Enchantment enchantment, final int level) {
+        final ItemMeta itemMeta = this.itemStack.getItemMeta();
         itemMeta.addEnchant(enchantment, level, true);
-        itemStack.setItemMeta(itemMeta);
+        this.itemStack.setItemMeta(itemMeta);
         return this;
     }
 
-    public ItemBuilder addLore(List<String> lore) {
-        ItemMeta itemMeta = itemStack.getItemMeta();
+    public ItemBuilder addLore(final List<String> lore) {
+        final ItemMeta itemMeta = this.itemStack.getItemMeta();
         itemMeta.setLore(lore);
-        itemStack.setItemMeta(itemMeta);
+        this.itemStack.setItemMeta(itemMeta);
         return this;
     }
 
-    public ItemBuilder addLore(String... lore) {
-        return addLore(Arrays.asList(lore));
+    public ItemBuilder addLore(final String... lore) {
+        return this.addLore(Arrays.asList(lore));
     }
 
-    public ItemBuilder setUnbreakable(boolean unbreakable) {
-        ItemMeta itemMeta = itemStack.getItemMeta();
+    public ItemBuilder setUnbreakable(final boolean unbreakable) {
+        final ItemMeta itemMeta = this.itemStack.getItemMeta();
         itemMeta.spigot().setUnbreakable(unbreakable);
-        itemStack.setItemMeta(itemMeta);
+        this.itemStack.setItemMeta(itemMeta);
         return this;
     }
 
     public ItemBuilder glow() {
-        ItemMeta itemMeta = itemStack.getItemMeta();
+        final ItemMeta itemMeta = this.itemStack.getItemMeta();
         itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         itemMeta.addEnchant(Enchantment.DURABILITY, 1, true);
-        itemStack.setItemMeta(itemMeta);
+        this.itemStack.setItemMeta(itemMeta);
         return this;
     }
 
     public ItemStack build() {
-        return itemStack;
+        return this.itemStack;
     }
 
 }

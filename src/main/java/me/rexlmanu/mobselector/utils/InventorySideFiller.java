@@ -19,7 +19,7 @@ public class InventorySideFiller {
         if (rows >= 3) {
             for (int i = 0; i <= 8; i++) sideSlots.add(i);
             for (int s = 8; s < (inventory.getSize() - 9); s += 9) {
-                int lastSlot = s + 1;
+                final int lastSlot = s + 1;
                 sideSlots.add(s);
                 sideSlots.add(lastSlot);
             }
@@ -34,7 +34,7 @@ public class InventorySideFiller {
 
     private static List<Integer> getNonSideSlots(final List<Integer> sideSlots, final Inventory inventory) {
         final List<Integer> availableSlots = Lists.newArrayList();
-        for (int i = 0; i < inventory.getSize(); i++) if (!sideSlots.contains(i)) availableSlots.add(i);
+        for (int i = 0; i < inventory.getSize(); i++) if (! sideSlots.contains(i)) availableSlots.add(i);
         return availableSlots;
     }
 

@@ -10,8 +10,14 @@ import org.bukkit.Location;
 @AllArgsConstructor
 public class MobLocation {
 
-    public static MobLocation get(Location location) {
-        return new MobLocation(location.getX(), location.getY(), location.getZ(), location.getPitch(), location.getYaw(), location.getWorld().getName());
+    public static MobLocation get(final Location location) {
+        return new MobLocation(
+                location.getX(),
+                location.getY(),
+                location.getZ(),
+                location.getPitch(),
+                location.getYaw(),
+                location.getWorld().getName());
     }
 
     private double x, y, z;
@@ -20,6 +26,6 @@ public class MobLocation {
     private String world;
 
     public Location getAsLocation() {
-        return new Location(Bukkit.getWorld(world), x, y, z, yaw, pitch);
+        return new Location(Bukkit.getWorld(this.world), this.x, this.y, this.z, this.yaw, this.pitch);
     }
 }

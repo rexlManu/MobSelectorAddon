@@ -18,12 +18,13 @@ public final class MobUtils {
     private static Method f;
 
     static {
-        String serverVersion = Bukkit.getServer().getClass().getName().split("\\.")[3];
+        final String serverVersion = Bukkit.getServer().getClass().getName().split("\\.")[3];
         try {
-            Class<?> craftEntity = Class.forName("org.bukkit.craftbukkit." + serverVersion + ".entity.CraftEntity");
+            final Class<?> craftEntity = Class.forName("org.bukkit.craftbukkit." + serverVersion +
+                    ".entity.CraftEntity");
             MobUtils.getHandle = craftEntity.getDeclaredMethod("getHandle");
             MobUtils.getHandle.setAccessible(true);
-            Class<?> nmsEntityClass = Class.forName("net.minecraft.server." + serverVersion + ".Entity");
+            final Class<?> nmsEntityClass = Class.forName("net.minecraft.server." + serverVersion + ".Entity");
             MobUtils.getNBTTag = nmsEntityClass.getDeclaredMethod("getNBTTag");
             MobUtils.getNBTTag.setAccessible(true);
             MobUtils.nbtTagClass = Class.forName("net.minecraft.server." + serverVersion + ".NBTTagCompound");
@@ -33,14 +34,14 @@ public final class MobUtils {
             MobUtils.setInt.setAccessible(true);
             MobUtils.f = nmsEntityClass.getDeclaredMethod("f", MobUtils.nbtTagClass);
             MobUtils.f.setAccessible(true);
-        } catch (ClassNotFoundException | NoSuchMethodException e) {
+        } catch (final ClassNotFoundException | NoSuchMethodException e) {
             e.printStackTrace();
         }
     }
 
     public static void setAiEnabled(final Entity entity, final boolean enabled) {
         try {
-            Object nmsEntity = MobUtils.getHandle.invoke(entity);
+            final Object nmsEntity = MobUtils.getHandle.invoke(entity);
             Object tag = MobUtils.getNBTTag.invoke(nmsEntity);
             if (tag == null) {
                 tag = MobUtils.nbtTagClass.newInstance();
@@ -48,14 +49,15 @@ public final class MobUtils {
             MobUtils.c.invoke(nmsEntity, tag);
             MobUtils.setInt.invoke(tag, "NoAI", enabled ? 0 : 1);
             MobUtils.f.invoke(nmsEntity, tag);
-        } catch (Exception e) {
+        } catch (final Exception e) {
             e.printStackTrace();
         }
     }
 
     private static boolean isLookingAt(final Player player, final Entity target) {
         final Location eyeLocation = player.getEyeLocation();
-        double dot = target.getLocation().toVector().subtract(eyeLocation.toVector()).normalize().dot(eyeLocation.getDirection());
+        final double dot = target.getLocation().toVector()
+                .subtract(eyeLocation.toVector()).normalize().dot(eyeLocation.getDirection());
         player.sendMessage(String.format("Debug: dot=%s", dot));
         return dot > 0.99D;
     }

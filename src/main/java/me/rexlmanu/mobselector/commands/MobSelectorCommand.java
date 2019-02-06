@@ -27,13 +27,15 @@ public final class MobSelectorCommand implements CommandExecutor, TabCompleter {
         pluginCommand.setDescription("The main command from plugin.");
         pluginCommand.setUsage("Please use '/mobselector help' for the helptopic.");
         pluginCommand.setPermission("mobselector.command.mobselector");
-        pluginCommand.setPermissionMessage(MobSelector.getInstance().getConfigManager().getMobSelectorSettings().getPermissionMessage());
+        pluginCommand.setPermissionMessage(MobSelector.getInstance().getConfigManager()
+                .getMobSelectorSettings().getPermissionMessage());
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean onCommand(final CommandSender sender, final Command command,
+                             final String label, final String[] args) {
         final MobSelector instance = MobSelector.getInstance();
-        if (!(sender instanceof Player)) {
+        if (! (sender instanceof Player)) {
             sender.sendMessage(instance.getConfigManager().getMobSelectorSettings().getConsoleSender());
             return true;
         }
@@ -45,11 +47,21 @@ public final class MobSelectorCommand implements CommandExecutor, TabCompleter {
             case 1:
                 if ("help".equalsIgnoreCase(args[0])) {
                     sender.sendMessage(ChatColor.GREEN + "Help overview for mobselector");
-                    sender.sendMessage(String.format("%s» %s/mobselector help %s| %sHelp overview", ChatColor.DARK_GRAY, ChatColor.GREEN, ChatColor.DARK_GRAY, ChatColor.GRAY));
-                    sender.sendMessage(String.format("%s» %s/mobselector create <ServerGroup> <EntityType> %s| %sCreate one servermob", ChatColor.DARK_GRAY, ChatColor.GREEN, ChatColor.DARK_GRAY, ChatColor.GRAY));
-                    sender.sendMessage(String.format("%s» %s/mobselector changetype <EntityType> %s| %sChange the type from a servermob", ChatColor.DARK_GRAY, ChatColor.GREEN, ChatColor.DARK_GRAY, ChatColor.GRAY));
-                    sender.sendMessage(String.format("%s» %s/mobselector changename <Displayname> %s| %sChange the name from a servermob", ChatColor.DARK_GRAY, ChatColor.GREEN, ChatColor.DARK_GRAY, ChatColor.GRAY));
-                    sender.sendMessage(String.format("%s» %s/mobselector remove %s| %sRemove a servermob", ChatColor.DARK_GRAY, ChatColor.GREEN, ChatColor.DARK_GRAY, ChatColor.GRAY));
+                    sender.sendMessage(String.format(
+                            "%s» %s/mobselector help %s| %sHelp overview",
+                            ChatColor.DARK_GRAY, ChatColor.GREEN, ChatColor.DARK_GRAY, ChatColor.GRAY));
+                    sender.sendMessage(String.format(
+                            "%s» %s/mobselector create <ServerGroup> <EntityType> %s| %sCreate one servermob",
+                            ChatColor.DARK_GRAY, ChatColor.GREEN, ChatColor.DARK_GRAY, ChatColor.GRAY));
+                    sender.sendMessage(String.format(
+                            "%s» %s/mobselector changetype <EntityType> %s| %sChange the type from a servermob",
+                            ChatColor.DARK_GRAY, ChatColor.GREEN, ChatColor.DARK_GRAY, ChatColor.GRAY));
+                    sender.sendMessage(String.format(
+                            "%s» %s/mobselector changename <Displayname> %s| %sChange the name from a servermob",
+                            ChatColor.DARK_GRAY, ChatColor.GREEN, ChatColor.DARK_GRAY, ChatColor.GRAY));
+                    sender.sendMessage(String.format(
+                            "%s» %s/mobselector remove %s| %sRemove a servermob",
+                            ChatColor.DARK_GRAY, ChatColor.GREEN, ChatColor.DARK_GRAY, ChatColor.GRAY));
                 } else if ("remove".equalsIgnoreCase(args[0])) {
                     final Entity lookingEntity = MobUtils.getLookingEntity(player);
                     if (lookingEntity == null) {
@@ -64,13 +76,13 @@ public final class MobSelectorCommand implements CommandExecutor, TabCompleter {
                     player.sendMessage(ChatColor.RED + "To edit an enity, you have to kook at one.");
                     return true;
                 }
-                ServerMob serverMob = instance.getMobManager().getServerMobByEntity(lookingEntity);
+                final ServerMob serverMob = instance.getMobManager().getServerMobByEntity(lookingEntity);
                 if (serverMob == null) {
                     player.sendMessage(ChatColor.RED + "This entity is not a servermob.");
                     return true;
                 }
                 if ("changetype".equalsIgnoreCase(args[0])) {
-                    final EntityType entityType = getEntityByName(args[1]);
+                    final EntityType entityType = this.getEntityByName(args[1]);
                     if (entityType == null) {
                         sender.sendMessage(ChatColor.RED + "The entity type could not be found");
                         return true;
@@ -79,32 +91,39 @@ public final class MobSelectorCommand implements CommandExecutor, TabCompleter {
                     serverMob.setEntityTypeName(entityType.name());
                     instance.getMobManager().spawnMob(serverMob);
                     instance.getConfigManager().save();
-                    sender.sendMessage(ChatColor.GREEN + String.format("You have successful changed the entity type to %s.", entityType.name()));
+                    sender.sendMessage(ChatColor.GREEN + String.format(
+                            "You have successful changed the entity type to %s.", entityType.name()));
                 } else if ("changename".equalsIgnoreCase(args[0])) {
                     instance.getMobManager().removeMob(lookingEntity);
-                    final String displayName = ChatColor.translateAlternateColorCodes('&', args[1].replace("_", " "));
+                    final String displayName = ChatColor.translateAlternateColorCodes('&',
+                            args[1].replace("_", " "));
                     serverMob.setDisplayName(displayName);
                     instance.getMobManager().spawnMob(serverMob);
                     instance.getConfigManager().save();
-                    sender.sendMessage(ChatColor.GREEN + String.format("You have successful changed the display name to '%s'.", displayName));
+                    sender.sendMessage(ChatColor.GREEN + String.format(
+                            "You have successful changed the display name to '%s'.", displayName));
                 }
                 break;
             case 3:
                 if ("create".equalsIgnoreCase(args[0])) {
                     final String serverGroupName = args[1];
                     final String entityTypeName = args[2];
-                    final Map<String, ServerGroup> serverGroups = KlarCloudAPISpigot.getInstance().getInternalCloudNetwork().getServerGroups();
-                    if (!serverGroups.containsKey(serverGroupName)) {
+                    final Map<String, ServerGroup> serverGroups = KlarCloudAPISpigot.getInstance()
+                            .getInternalCloudNetwork().getServerGroups();
+                    if (! serverGroups.containsKey(serverGroupName)) {
                         sender.sendMessage(ChatColor.RED + "The server group could not be found");
                         return true;
                     }
                     final ServerGroup serverGroup = serverGroups.get(serverGroupName);
-                    EntityType entityType = getEntityByName(entityTypeName);
+                    final EntityType entityType = this.getEntityByName(entityTypeName);
                     if (entityType == null) {
                         sender.sendMessage(ChatColor.RED + "The entity type could not be found");
                         return true;
                     }
-                    instance.getMobManager().createMob(serverGroup, new ServerMob(MobLocation.get(player.getLocation()), ChatColor.DARK_GRAY + "» " + ChatColor.RED + serverGroupName, entityType.name()));
+                    instance.getMobManager().createMob(serverGroup, new ServerMob(
+                            MobLocation.get(player.getLocation()),
+                            ChatColor.DARK_GRAY + "» " + ChatColor.RED + serverGroupName,
+                            entityType.name()));
                     sender.sendMessage(ChatColor.GREEN + "The server mob was created successfully");
                 }
                 break;
@@ -117,13 +136,15 @@ public final class MobSelectorCommand implements CommandExecutor, TabCompleter {
     }
 
     @SuppressWarnings("UnstableApiUsage")
-    private EntityType getEntityByName(String entityTypeName) {
-        final Optional<EntityType> entityTypeOptional = Enums.getIfPresent(EntityType.class, entityTypeName.toUpperCase());
+    private EntityType getEntityByName(final String entityTypeName) {
+        final Optional<EntityType> entityTypeOptional = Enums.getIfPresent(EntityType.class,
+                entityTypeName.toUpperCase());
         return entityTypeOptional.isPresent() ? entityTypeOptional.get() : null;
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+    public List<String> onTabComplete(final CommandSender sender, final Command command,
+                                      final String alias, final String[] args) {
         return Lists.newArrayList();
     }
 }
